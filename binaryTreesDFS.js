@@ -85,3 +85,68 @@ var hasPathSum = function(root, targetSum) {
     }
     return hasPathSum(root.left, curr) || hasPathSum(root.right, curr)
 };
+
+//Minimum Depth of Binary Tree
+
+//Given a binary tree, find its minimum depth.
+
+//The minimum depth is the number of nodes along the shortest path from the root node down to the nearest leaf node.
+//Note: A leaf is a node with no children.
+
+//https://leetcode.com/problems/minimum-depth-of-binary-tree/description/    
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var minDepth = function(root) {
+    if (!root) {
+      return null;
+    }
+    
+    let left = minDepth(root.left) + 1;
+    let right = minDepth(root.right) + 1;
+    return right === 1 ? left : left === 1 ? right : Math.min(right, left);
+    
+};
+
+//Maximum Difference Between Node and Ancestor
+
+//Given the root of a binary tree, find the maximum value v for which there exist different nodes a and b where v = |a.val - b.val| and a is an ancestor of b.
+//A node a is an ancestor of b if either: any child of a is equal to b or any child of a is an ancestor of b.
+
+//https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/description/
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxAncestorDiff = function(root) {
+    const helper = (node, maxVal, minVal) => {
+        if (!node) return null;
+        maxVal = Math.max(maxVal, node.val);
+        minVal = Math.min(minVal, node.val);
+        let ans = Math.abs(maxVal - minVal);
+        let left = helper(node.left, maxVal, minVal);
+        let right = helper(node.right, maxVal, minVal);
+        return Math.max(left, right, ans);
+    }
+    
+    return helper(root, root.val, root.val)
+};
