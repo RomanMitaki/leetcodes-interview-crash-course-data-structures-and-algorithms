@@ -150,3 +150,70 @@ var maxAncestorDiff = function(root) {
     
     return helper(root, root.val, root.val)
 };
+
+//Maximum Difference Between Node and Ancestor
+
+//https://leetcode.com/problems/maximum-difference-between-node-and-ancestor/description/
+
+//Given the root of a binary tree, find the maximum value v for which there exist different nodes a and b where v = |a.val - b.val| and a is an ancestor of b.
+//A node a is an ancestor of b if either: any child of a is equal to b or any child of a is an ancestor of b.
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var maxAncestorDiff = function(root) {
+    const helper = (node, maxVal, minVal) => {
+        if (!node) return null;
+        maxVal = Math.max(maxVal, node.val);
+        minVal = Math.min(minVal, node.val);
+        let ans = Math.abs(maxVal - minVal);
+        let left = helper(node.left, maxVal, minVal);
+        let right = helper(node.right, maxVal, minVal);
+        return Math.max(left, right, ans);
+    }
+    
+    return helper(root, root.val, root.val)
+};
+
+//Diameter of Binary Tree
+
+//https://leetcode.com/problems/diameter-of-binary-tree/description/
+
+//Given the root of a binary tree, return the length of the diameter of the tree.
+//The diameter of a binary tree is the length of the longest path between any two nodes in a tree. This path may or may not pass through the root.
+//The length of a path between two nodes is represented by the number of edges between them.
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @return {number}
+ */
+var diameterOfBinaryTree = function(root) {
+    let ans = 0;
+    const findPath = (node) => {
+        if (!node) return null;
+        let left = findPath(node.left);
+        let right = findPath(node.right);
+        ans = Math.max(ans, left + right)
+        return Math.max(left, right) + 1;
+        
+    }
+    findPath(root);
+    return ans;
+};
