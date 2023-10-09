@@ -149,4 +149,41 @@ var isValidBST = function(root) {
     return helper(root, -Infinity, Infinity)
 };
 
+//Closest Binary Search Tree Value
 
+//Given the root of a binary search tree and a target value, return the value in the BST that is closest to the target. If there are multiple answers, print the smallest.
+
+//https://leetcode.com/problems/closest-binary-search-tree-value/description/
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} target
+ * @return {number}
+ */
+var closestValue = function(root, target) {
+    target = Number.isInteger(target + 0.5) ? Math.floor(target) : Math.round(target);
+    let diff = [Infinity, null];
+    let [minDiff, val] = diff;
+    const helper = (node, diff) => {
+        if (!node) return;
+        let currMin = Math.abs(node.val - target);
+        if (minDiff > currMin) {
+            minDiff = currMin;
+            val = node.val;
+        }
+        if (minDiff === 0) return;
+        helper(node.left, currMin)
+        helper(node.right, currMin)
+        return
+    }
+    helper(root, Infinity);
+    return val;
+};
