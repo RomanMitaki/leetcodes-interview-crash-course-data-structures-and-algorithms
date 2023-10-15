@@ -171,3 +171,31 @@ var canVisitAllRooms = function(rooms) {
     dfs(0);
     return seen.every(Boolean)
 };
+
+//Minimum Number of Vertices to Reach All Nodes
+
+//https://leetcode.com/problems/minimum-number-of-vertices-to-reach-all-nodes/description/
+
+//Given a directed acyclic graph, with n vertices numbered from 0 to n-1, and an array edges where edges[i] = [fromi, toi] represents a directed edge from node fromi to node toi.
+//Find the smallest set of vertices from which all nodes in the graph are reachable. It's guaranteed that a unique solution exists.
+//Notice that you can return the vertices in any order.
+
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @return {number[]}
+ */
+var findSmallestSetOfVertices = function(n, edges) {
+    const indegree = new Array(n).fill(0);
+    for (let [_, node] of edges) {
+        indegree[node]++;
+    }
+    
+    let ans = [];
+    for (let i = 0; i < n; i++) {
+        if (indegree[i] === 0) ans.push(i)
+    }
+
+    return ans;
+};
+
