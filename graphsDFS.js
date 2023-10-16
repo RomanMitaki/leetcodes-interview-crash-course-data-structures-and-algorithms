@@ -240,5 +240,49 @@ var validPath = function(n, edges, source, destination) {
     return ans;
 };
 
+//Reachable Nodes With Restrictions
+
+//https://leetcode.com/problems/reachable-nodes-with-restrictions/description/
+
+//There is an undirected tree with n nodes labeled from 0 to n - 1 and n - 1 edges.
+//You are given a 2D integer array edges of length n - 1 where edges[i] = [ai, bi] indicates that there is an edge between nodes ai and bi in the tree. You are also given an integer array restricted which represents restricted nodes.
+//Return the maximum number of nodes you can reach from node 0 without visiting a restricted node.
+//Note that node 0 will not be a restricted node.
+
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @param {number[]} restricted
+ * @return {number}
+ */
+var reachableNodes = function(n, edges, restricted) {
+    let ans = 0;
+    const restrictedSet = new Set(restricted);
+    const seen = new Array(n).fill(false);
+    const graph = new Map();
+    for (let i = 0; i < n; i++) {
+        graph.set(i, []);
+    }
+    for (let [a, b] of edges) {
+        graph.get(a).push(b);
+        graph.get(b).push(a);
+    }
+    
+    const dfs = (node) => {
+        for (let neighbor of graph.get(node)) {
+            if (!seen[neighbor] && !restrictedSet.has(neighbor)) {
+                seen[neighbor] = true;
+                ans++;
+                dfs(neighbor);
+            }
+        }
+    }
+    seen[0] = true;
+    ans++;
+    dfs(0);
+    return ans;
+};
+
+
 
 
