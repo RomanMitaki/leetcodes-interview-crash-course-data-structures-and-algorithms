@@ -283,6 +283,100 @@ var reachableNodes = function(n, edges, restricted) {
     return ans;
 };
 
+//Number of Connected Components in an Undirected Graph
 
+//https://leetcode.com/problems/number-of-connected-components-in-an-undirected-graph/description/
 
+//You have a graph of n nodes. You are given an integer n and an array edges where edges[i] = [ai, bi] indicates that there is an edge between ai and bi in the graph.
+//Return the number of connected components in the graph.
+
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @return {number}
+ */
+var countComponents = function(n, edges) {
+    let ans = 0;
+    
+    const seen = new Array(n).fill(false);
+    
+    const graph = new Map();
+    for (let i = 0; i < n; i++) {
+        graph.set(i, [])
+    }
+    for (let [x, y] of edges) {
+        graph.get(x).push(y);
+        graph.get(y).push(x);
+    }
+    
+    const dfs = (node) => {
+        for (let neighbor of graph.get(node)) {
+            if (!seen[neighbor]) {
+                seen[neighbor] = true;
+                dfs(neighbor);
+            }
+        }
+    }
+    
+    while (seen.indexOf(false) !== -1) {
+        ans++;
+        let node = seen.indexOf(false);
+        seen[node] = true;
+        dfs(node);
+    }
+    
+    return ans;
+};
+
+//Max Area of Island
+
+//https://leetcode.com/problems/max-area-of-island/description/
+
+//You are given an m x n binary matrix grid. An island is a group of 1's (representing land) connected 4-directionally (horizontal or vertical.) You may assume all four edges of the grid are surrounded by water.
+//The area of an island is the number of cells with a value 1 in the island.
+//Return the maximum area of an island in grid. If there is no island, return 0.
+
+/**
+ * @param {number[][]} grid
+ * @return {number}
+ */
+var maxAreaOfIsland = function(grid) {
+    const m = grid.length;
+    const n = grid[0].length;
+    const isValid = (posX, posY) => {
+        return 0 <= posX && posX < n && 0 <= posY && posY < m && grid[posY][posX] === 1;
+    }
+    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+    
+    const seen = new Set();
+    const convertToHash = (posY, posX) => {
+        return posY + ',' + posX;
+    }
+    
+    const dfs = (posY, posX) => {
+        let s = 1;
+        for (let [row, col] of directions) {
+            let nextRow = row + posY;
+            let nextCol = col + posX;
+            if (isValid(nextCol, nextRow) && !seen.has(convertToHash(nextRow, nextCol))) {
+                seen.add(convertToHash(nextRow, nextCol));
+                s += dfs(nextRow, nextCol);
+            }
+        }
+        return s;
+    }
+    
+    let ans = 0;
+    
+    for (let row = 0; row < m; row++) {
+        for (let col = 0; col < n; col++) {
+            if (grid[row][col] === 1 && !seen.has(convertToHash(row, col))) {
+                seen.add(convertToHash(row, col));
+                ans = Math.max(ans, dfs(row, col));
+            }
+        }
+    }
+    
+    return ans;
+};
 
