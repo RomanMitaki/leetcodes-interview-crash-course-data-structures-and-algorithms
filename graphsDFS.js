@@ -199,3 +199,46 @@ var findSmallestSetOfVertices = function(n, edges) {
     return ans;
 };
 
+//Find if Path Exists in Graph
+
+//https://leetcode.com/problems/find-if-path-exists-in-graph/description/
+
+//There is a bi-directional graph with n vertices, where each vertex is labeled from 0 to n - 1 (inclusive). The edges in the graph are represented as a 2D integer array edges, where each edges[i] = [ui, vi] denotes a bi-directional edge between vertex ui and vertex vi. Every vertex pair is connected by at most one edge, and no vertex has an edge to itself.
+//You want to determine if there is a valid path that exists from vertex source to vertex destination.
+//Given edges and the integers n, source, and destination, return true if there is a valid path from source to destination, or false otherwise.
+
+/**
+ * @param {number} n
+ * @param {number[][]} edges
+ * @param {number} source
+ * @param {number} destination
+ * @return {boolean}
+ */
+var validPath = function(n, edges, source, destination) {
+    if (n === 1 && source === 0 && destination === 0) return true;
+    const graph = new Map();
+    for (let i = 0; i < n; i++) {
+        graph.set(i, []);
+    }
+    for (let [x, y] of edges) {
+        graph.get(x).push(y);
+        graph.get(y).push(x);
+    }
+    let ans = false;
+    const seen = new Array(n).fill(false);
+    const dfs = (node, dist) => {
+        for (let neighbor of graph.get(node)) {
+            if (neighbor === dist) ans = true;
+            if (!seen[neighbor]) {
+                seen[neighbor] = true;
+                dfs(neighbor, dist)
+            } 
+        }
+    }
+    seen[source] = true;
+    dfs(source, destination);
+    return ans;
+};
+
+
+
