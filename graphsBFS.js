@@ -111,3 +111,57 @@ var distanceK = function(root, target, k) {
     
     return queue.map(node => node.val);
 };
+
+//01 Matrix
+
+//https://leetcode.com/problems/01-matrix/description/
+
+//Given an m x n binary matrix mat, return the distance of the nearest 0 for each cell.
+//The distance between two adjacent cells is 1.
+
+/**
+ * @param {number[][]} mat
+ * @return {number[][]}
+ */
+var updateMatrix = function(mat) {
+    const m = mat.length;
+    const n = mat[0].length;
+    const isValid = (row, col) => {
+        return 0 <= row && row < m && 0 <= col && col < n && mat[row][col] === 1;
+    }
+    const directions = [[-1, 0], [0, 1], [1, 0], [0, -1]];
+    let depth = 0;
+    const seen = [];
+    for (let row = 0; row < m; row++) {
+        seen.push(new Array(n).fill(false))
+    }
+    let queue = [];
+    for (let i = 0; i < m; i++) {
+        for (let j = 0; j < n; j++) {
+            if (mat[i][j] === 0) {
+                queue.push([i, j]);
+                seen[i][j] = true;
+            }
+        }
+    }
+
+    while (queue.length) {
+        let len = queue.length;
+        let nextQueue = [];
+        depth++;
+        for (let i = 0; i < len; i++) {
+            let [row, col] = queue[i];
+            for (let neighbor of directions) {
+                let nextRow = row + neighbor[0], nextCol = col + neighbor[1];
+                if (isValid(nextRow, nextCol) && !seen[nextRow][nextCol]) {
+                    seen[nextRow][nextCol] = true;
+                    nextQueue.push([nextRow, nextCol]);
+                    mat[nextRow][nextCol] = depth;
+                }
+            }
+        }
+        queue = nextQueue;
+    }
+
+    return mat;
+};
