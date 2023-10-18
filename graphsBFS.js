@@ -53,3 +53,61 @@ var shortestPathBinaryMatrix = function(grid) {
     }
     return -1;
 };
+
+//All Nodes Distance K in Binary Tree
+
+//https://leetcode.com/problems/all-nodes-distance-k-in-binary-tree/description/
+
+//Given the root of a binary tree, the value of a target node target, and an integer k, return an array of the values of all nodes that have a distance k from the target node.
+//You can return the answer in any order.
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {TreeNode} target
+ * @param {number} k
+ * @return {number[]}
+ */
+var distanceK = function(root, target, k) {
+    const dfs = (node, parent) => {
+        if (!node) {
+            return
+        }
+        
+        node.parent = parent;
+        dfs(node.left, node);
+        dfs(node.right, node);
+    }
+
+    dfs(root, null);
+
+    let queue = [target];
+    const seen = new Set();
+    seen.add(target)
+    let depth = 0;
+
+    while (queue.length && depth < k) {
+        depth++;
+        let currLen = queue.length;
+        let newQueue = [];
+
+        for (let i = 0; i < currLen; i++) {
+            let node = queue[i];
+            for(const neighbor of [node.left, node.right, node.parent]) {
+                if (neighbor && !seen.has(neighbor)) {
+                    seen.add(neighbor);
+                    newQueue.push(neighbor);
+                }
+            }
+        }
+        queue = newQueue;
+    }
+    
+    return queue.map(node => node.val);
+};
