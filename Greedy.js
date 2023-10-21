@@ -105,3 +105,117 @@ var numRescueBoats = function(people, limit) {
     }
     return ans;
 };
+
+//Maximum 69 Number
+
+//https://leetcode.com/problems/maximum-69-number/description/
+
+//You are given a positive integer num consisting only of digits 6 and 9.
+//Return the maximum number you can get by changing at most one digit (6 becomes 9, and 9 becomes 6).
+
+/**
+ * @param {number} num
+ * @return {number}
+ */
+var maximum69Number  = function(num) {
+    const arr = String(num).split('');
+    let testSix = arr.indexOf('6');
+    if (testSix !== -1) {
+        arr[testSix] = '9';
+    }
+    return +arr.join('')
+};
+
+//Maximum Units on a Truck
+
+//https://leetcode.com/problems/maximum-units-on-a-truck/description/
+
+//You are assigned to put some amount of boxes onto one truck. You are given a 2D array boxTypes, where boxTypes[i] = [numberOfBoxesi, numberOfUnitsPerBoxi]:
+//numberOfBoxesi is the number of boxes of type i.
+//numberOfUnitsPerBoxi is the number of units in each box of the type i.
+//You are also given an integer truckSize, which is the maximum number of boxes that can be put on the truck. You can choose any boxes to put on the truck as long as the number of boxes does not exceed truckSize.
+//Return the maximum total number of units that can be put on the truck.
+
+/**
+ * @param {number[][]} boxTypes
+ * @param {number} truckSize
+ * @return {number}
+ */
+var maximumUnits = function(boxTypes, truckSize) {
+    let ans = 0;
+    let currSize = 0;
+    boxTypes.sort((a, b) => b[1] - a[1]);
+    for (let boxType of boxTypes) {
+        let [qty, volume] = boxType;
+        if (currSize === truckSize) break;
+        while (qty) {
+            qty--;
+            ans += volume;
+            currSize++;
+            if (currSize === truckSize) break;
+        }
+    }
+    return ans;
+};
+
+//How Many Apples Can You Put into the Basket
+
+//https://leetcode.com/problems/how-many-apples-can-you-put-into-the-basket/description/
+
+//You have some apples and a basket that can carry up to 5000 units of weight.
+//Given an integer array weight where weight[i] is the weight of the ith apple, return the maximum number of apples you can put in the basket.
+
+/**
+ * @param {number[]} weight
+ * @return {number}
+ */
+var maxNumberOfApples = function(weight) {
+    weight.sort((a, b) => b - a);
+    let ans = 0;
+    let currWeight = 0;
+    while (true) {
+        let apple = weight[weight.length - 1];
+        if (currWeight + apple <= 5000) {
+            ans ++;
+            currWeight += weight.pop();
+        } else {
+            break;
+        }
+    }
+    return ans;
+};
+
+//Reduce Array Size to The Half
+
+//https://leetcode.com/problems/reduce-array-size-to-the-half/description/
+
+//You are given an integer array arr. You can choose a set of integers and remove all the occurrences of these integers in the array.
+//Return the minimum size of the set so that at least half of the integers of the array are removed.
+
+/**
+ * @param {number[]} arr
+ * @return {number}
+ */
+var minSetSize = function(arr) {
+    const counter = new Map();
+    arr.forEach(num => counter.set(num, (counter.get(num) || 0) + 1));
+    const counts = [];
+    for (let val of counter.values()) {
+        counts.push(val);
+    }
+    counts.sort((a, b) => a - b);
+    let ans = 0;
+    let currLen = 0;
+    const limit = Math.round(arr.length / 2);
+    while (counts.length) {
+        let currVal = counts[counts.length - 1];
+        if (currLen >= limit) {
+            break;
+        } else {
+            currLen += counts.pop();
+            ans++;
+        }
+    }
+    return ans;
+};
+
