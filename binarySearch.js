@@ -95,3 +95,70 @@ var successfulPairs = function(spells, potions, success) {
     }
     return ans;
 };
+
+//Search Insert Position
+
+//https://leetcode.com/problems/search-insert-position/description/
+
+//Given a sorted array of distinct integers and a target value, return the index if the target is found. If not, return the index where it would be if it were inserted in order.
+//You must write an algorithm with O(log n) runtime complexity.
+
+/**
+ * @param {number[]} nums
+ * @param {number} target
+ * @return {number}
+ */
+var searchInsert = function(nums, target) {
+    let left = 0, right = nums.length - 1;
+    while (left <= right) {
+        let mid = Math.floor((left + right) / 2);
+        if (nums[mid] === target) return mid;
+        if (nums[mid] < target) {
+            left = mid + 1;
+        } else {
+            right = mid - 1;
+        }
+    }
+    
+    return left;
+};
+
+//Longest Subsequence With Limited Sum
+
+//https://leetcode.com/problems/longest-subsequence-with-limited-sum/description/
+
+//You are given an integer array nums of length n, and an integer array queries of length m.
+//Return an array answer of length m where answer[i] is the maximum size of a subsequence that you can take from nums such that the sum of its elements is less than or equal to queries[i].
+//A subsequence is an array that can be derived from another array by deleting some or no elements without changing the order of the remaining elements.
+
+/**
+ * @param {number[]} nums
+ * @param {number[]} queries
+ * @return {number[]}
+ */
+var answerQueries = function(nums, queries) {
+    nums.sort((a, b) => a - b);
+    let prefix = [nums[0]];
+    for (let i = 1; i < nums.length; i++) {
+        prefix.push(prefix[prefix.length -1] + nums[i])
+    }
+    let ans = [];
+    const search = (arr, target) => {
+        let left = 0, right = arr.length - 1;
+        while (left <= right) {
+            let mid = Math.floor((left + right) / 2);
+            if (arr[mid] > target) {
+                right = mid - 1;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+    
+    for (let query of queries) {
+        let idx = search(prefix, query);
+        ans.push(idx)
+    }
+    return ans;
+};
