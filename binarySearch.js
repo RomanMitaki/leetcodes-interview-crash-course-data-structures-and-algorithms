@@ -162,3 +162,107 @@ var answerQueries = function(nums, queries) {
     }
     return ans;
 };
+
+//Koko Eating Bananas
+
+//https://leetcode.com/problems/koko-eating-bananas/description/
+
+//Koko loves to eat bananas. There are n piles of bananas, the ith pile has piles[i] bananas. The guards have gone and will come back in h hours.
+//Koko can decide her bananas-per-hour eating speed of k. Each hour, she chooses some pile of bananas and eats k bananas from that pile. If the pile has less than k bananas, she eats all of them instead and will not eat any more bananas during this hour.
+//Koko likes to eat slowly but still wants to finish eating all the bananas before the guards return.
+//Return the minimum integer k such that she can eat all the bananas within h hours.
+
+/**
+ * @param {number[]} piles
+ * @param {number} h
+ * @return {number}
+ */
+var minEatingSpeed = function(piles, h) {
+    let min = 1;
+    let max = Math.max(...piles);
+    const checkTime = (k) => {
+        let ans = 0;
+        for (let bananas of piles) {
+            ans += Math.ceil(bananas / k)
+        }
+        return ans <= h;
+    }
+    while (min <= max) {
+        let mid = Math.floor((min + max) / 2);
+        if (checkTime(mid)) {
+            max = mid - 1;
+        } else {
+            min = mid + 1;
+        }
+    }
+    return min;
+};
+
+//Path With Minimum Effort
+
+//https://leetcode.com/problems/path-with-minimum-effort/description/
+
+//You are a hiker preparing for an upcoming hike. You are given heights, a 2D array of size rows x columns, where heights[row][col] represents the height of cell (row, col). You are situated in the top-left cell, (0, 0), and you hope to travel to the bottom-right cell, (rows-1, columns-1) (i.e., 0-indexed). You can move up, down, left, or right, and you wish to find a route that requires the minimum effort.
+//A route's effort is the maximum absolute difference in heights between two consecutive cells of the route.
+//Return the minimum effort required to travel from the top-left cell to the bottom-right cell.
+
+/**
+ * @param {number[][]} heights
+ * @return {number}
+ */
+var minimumEffortPath = function(heights) {
+    const directions = [[0, 1], [1, 0], [0, -1], [-1, 0]];
+    const m = heights.length;
+    const n = heights[0].length;
+    const isValid = (row, col) => {
+        return 0 <= row && row < m && 0 <= col && col < n;
+    }
+    
+    const checkPath = (effort) => {
+        const seen = [];
+        for (let i = 0; i < m; i++) {
+            seen.push(new Array(n).fill(false))
+        }
+        const dfs = () => {
+            let stack = [[0, 0]];
+            while (stack.length) {
+                let [row, col] = stack.pop();
+
+                if (row === m - 1 && col === n - 1) return true;
+
+                for (let neighbor of directions) {
+                let nextRow = neighbor[0] + row;
+                let nextCol = neighbor[1] + col;
+                    if (isValid(nextRow, nextCol) && !seen[nextRow][nextCol]) {
+                        if (Math.abs(heights[nextRow][nextCol] - heights[row][col]) <= effort) {
+                            seen[nextRow][nextCol] = true;
+                            stack.push([nextRow, nextCol]);
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+        seen[0][0] = true;
+        return dfs();
+    }
+    let min = 0;
+    let maxEffort = -Infinity;
+    let minEffort = Infinity;
+    for (let arr of heights) {
+        maxEffort = Math.max(maxEffort, Math.max(...arr));
+        minEffort = Math.min(minEffort, Math.min(...arr));
+    }
+    let max = maxEffort - minEffort;
+    
+    while (min <= max) {
+        let mid = Math.floor((min + max) / 2);
+        if (checkPath(mid)) {
+            max = mid - 1;
+        } else {
+            min = mid + 1;
+        }
+    }
+    return min;
+};
+
