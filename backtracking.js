@@ -84,6 +84,44 @@ var combine = function(n, k) {
             curr.pop();
         }
     }
+
     backtrack([], 1);
+    return ans;
+};
+
+ //All Paths From Source to Target
+
+//https://leetcode.com/problems/all-paths-from-source-to-target/description/
+
+//Given a directed acyclic graph (DAG) of n nodes labeled from 0 to n - 1, find all possible paths from node 0 to node n - 1 and return them in any order.
+//The graph is given as follows: graph[i] is a list of all nodes you can visit from node i (i.e., there is a directed edge from node i to node graph[i][j]).
+
+/**
+ * @param {number[][]} graph
+ * @return {number[][]}
+ */
+var allPathsSourceTarget = function(graph) {
+    const n = graph.length;
+    const map = new Map();
+    for (let edges = 0; edges < n; edges++) {
+        map.set(edges, graph[edges])
+    }
+    
+    const ans = [];
+    const backtrack = (curr, node) => {
+        curr.push(node);
+        if (!map.get(node).length || node === n - 1) {
+            if (curr[curr.length - 1] === n - 1) {
+                ans.push([...curr]);
+            }
+            return;
+        }
+        
+        for (let neighbor of map.get(node)) {
+            backtrack(curr, neighbor);
+            curr.pop();
+        }
+    }
+    backtrack([], 0);
     return ans;
 };
