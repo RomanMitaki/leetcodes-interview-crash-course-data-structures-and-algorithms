@@ -125,3 +125,47 @@ var allPathsSourceTarget = function(graph) {
     backtrack([], 0);
     return ans;
 };
+
+//Letter Combinations of a Phone Number
+
+//https://leetcode.com/problems/letter-combinations-of-a-phone-number/description/
+
+//Given a string containing digits from 2-9 inclusive, return all possible letter combinations that the number could represent. Return the answer in any order.
+//A mapping of digits to letters (just like on the telephone buttons) is given below. Note that 1 does not map to any letters.
+
+/**
+ * @param {string} digits
+ * @return {string[]}
+ */
+var letterCombinations = function(digits) {
+    if (!digits) return [];
+    const transform = (arr) => {
+        return arr.join('')
+    }
+    const map = new Map();
+    map.set('2', ["a","b","c"]);
+    map.set('3', ["d","e","f"]);
+    map.set('4', ["g","h","i"]);
+    map.set('5', ["j","k","l"]);
+    map.set('6', ["m","n","o"]);
+    map.set('7', ["p","q","r","s"]);
+    map.set('8', ["t","u","v"]);
+    map.set('9', ["w","x","y","z"]);
+    
+    const ans = [];
+    
+    const backtrack = (curr, idx) => {
+        if (!digits[idx]) {
+            ans.push([...curr]);
+            return;
+        }
+        
+        for (let letter of map.get(digits[idx])) {
+            curr.push(letter);
+            backtrack(curr, idx + 1);
+            curr.pop();
+        }
+    }
+    backtrack([], 0)
+    return ans.map(transform);
+};
