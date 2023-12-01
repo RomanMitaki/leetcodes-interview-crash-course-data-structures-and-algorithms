@@ -49,3 +49,22 @@ var rob = function(nums) {
     }
     return dp(nums.length)
 };
+
+//Longest Increasing Subsequence
+//https://leetcode.com/problems/longest-increasing-subsequence/description/
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var lengthOfLIS = function(nums) {
+    const ans = new Array(nums.length).fill(1);
+    for (let i = 0; i < nums.length; i++) {
+        for (let j = 0; j < i; j++) {
+            if (nums[i] > nums[j]) {
+                ans[i] = Math.max(ans[i], 1 + ans[j])
+            }
+        }
+    }
+    return Math.max(...ans)
+};
