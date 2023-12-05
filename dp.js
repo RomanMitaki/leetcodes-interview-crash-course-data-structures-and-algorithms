@@ -86,3 +86,21 @@ var climbStairs = function(n) {
     }
     return dp[n-1]
 };
+
+//Min Cost Climbing Stairs
+//https://leetcode.com/problems/min-cost-climbing-stairs/description/
+
+/**
+ * @param {number[]} cost
+ * @return {number}
+ */
+var minCostClimbingStairs = function(cost) {
+    let len = cost.length;
+    const dp = new Array(len).fill(0);
+    dp[0] = cost[0];
+    dp[1] = cost[1];
+    for (let i = 2; i < len; i++) {
+        dp[i] = Math.min(cost[i] + dp[i-1], cost[i] + dp[i-2]);
+    }
+    return Math.min(dp[len-1], dp[len-2])
+};
