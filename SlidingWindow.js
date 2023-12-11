@@ -59,3 +59,35 @@ var longestOnes = function(nums, k) {
     }
     return ans;
 };
+
+//Minimum Size Subarray Sum
+
+//https://leetcode.com/problems/minimum-size-subarray-sum/
+
+/**
+ * @param {number} target
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minSubArrayLen = function (target, nums) {
+    let prefix = [nums[0]];
+    for (let i = 1; i < nums.length; i++) {
+        prefix.push(prefix[prefix.length - 1] + nums[i])
+    }
+
+    let ans = Infinity;
+    let left = 0;
+    let right = 0;
+
+    while (left < nums.length && right < nums.length) {
+        if (nums[right] === target) return 1;
+        let curr = prefix[right] - prefix[left] + nums[left];
+        while (curr >= target) {
+            ans = Math.min(ans, right - left + 1);
+            left++;
+            curr = prefix[right] - prefix[left] + nums[left];
+        }
+        right++;
+    }
+    return ans === Infinity ? 0 : ans;
+};
