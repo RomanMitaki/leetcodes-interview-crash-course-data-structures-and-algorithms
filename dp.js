@@ -127,3 +127,36 @@ var coinChange = function(coins, amount) {
     return dp[amount] === amount + 1 ? -1 : dp[amount];
 
 };
+
+//Longest Common Subsequence
+//https://leetcode.com/problems/longest-common-subsequence/
+
+/**
+ * @param {string} text1
+ * @param {string} text2
+ * @return {number}
+ */
+var longestCommonSubsequence = function(text1, text2) {
+    const dp = (i, j) => {
+        if (i === text1.length || j === text2.length) {
+            return 0;
+        }
+
+        if (cache[i][j] !== -1) {
+            return cache[i][j]
+        }
+
+        if (text1[i] === text2[j]) {
+            return 1 + dp(i + 1, j + 1);
+        }
+
+        cache[i][j] = Math.max(dp(i + 1, j), dp(i, j + 1));
+        return cache[i][j];
+    }
+
+    let cache = [];
+    for (let i = 0; i < text1.length; i++) {
+        cache.push(new Array(text2.length).fill(-1))
+    }
+    return dp(0, 0);
+};
