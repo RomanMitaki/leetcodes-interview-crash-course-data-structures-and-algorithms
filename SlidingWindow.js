@@ -91,3 +91,65 @@ var minSubArrayLen = function (target, nums) {
     }
     return ans === Infinity ? 0 : ans;
 };
+
+//Maximum Number of Vowels in a Substring of Given Length
+//https://leetcode.com/problems/maximum-number-of-vowels-in-a-substring-of-given-length/
+
+/**
+ * @param {string} s
+ * @param {number} k
+ * @return {number}
+ */
+var maxVowels = function(s, k) {
+  const vowels = new Set(['a', 'e', 'i', 'o', 'u']);
+  let ans = 0;
+  let curr = 0;
+  let left = 0;
+  for (let right = 0; right < s.length; right++) {
+    if (vowels.has(s[right])) curr++;
+    if (right - left + 1 === k) {
+      ans = Math.max(ans, curr);
+      if (ans === k) return ans;
+      if (vowels.has(s[left])) {
+        curr--;
+      }
+      left++;
+    }
+  }
+  return ans;
+
+};
+
+//Get Equal Substrings Within Budget
+//https://leetcode.com/problems/get-equal-substrings-within-budget/
+
+/**
+ * @param {string} s
+ * @param {string} t
+ * @param {number} maxCost
+ * @return {number}
+ */
+var equalSubstring = function(s, t, maxCost) {
+    const len = s.length;
+    let ans = 0;
+    const countCost = (l1, l2) => {
+        return Math.abs(l1.codePointAt(0) - l2.codePointAt(0));
+    }
+    let left = 0;
+    let currCost = 0;
+    let currLen = 0;
+
+    for (let right = 0; right < len; right++) {
+        currCost += countCost(s[right], t[right]);
+        
+        while (currCost > maxCost && left <= right) {
+            currCost -= countCost(s[left], t[left]);
+            left++;
+            currLen--;
+        }
+        currLen = right - left + 1;
+        ans = Math.max(ans, currLen)
+    }
+    
+    return ans;
+};
