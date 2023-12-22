@@ -85,3 +85,79 @@ var getAverages = function(nums, k) {
     return ans;
 };
 
+//Find the Highest Altitude
+//https://leetcode.com/problems/find-the-highest-altitude/
+
+/**
+ * @param {number[]} gain
+ * @return {number}
+ */
+var largestAltitude = function(gain) {
+    let ans = -Infinity;
+    let curr = 0;
+    for (let i = 0; i < gain.length; i++) {
+        curr += gain[i];
+        ans = Math.max(ans, curr);
+    }
+    return ans < 0 ? 0 : ans;
+};
+
+//Find Pivot Index
+//https://leetcode.com/problems/find-pivot-index/
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var pivotIndex = function(nums) {
+    const prefix = [];
+    prefix.push(nums[0]);
+    for (let i = 1; i < nums.length; i++) {
+        prefix.push(nums[i] + prefix[prefix.length - 1]);
+    }
+    let ans = -1;
+    if (nums.length === 1) return 0;
+    if (prefix[prefix.length - 1] - prefix[1] + nums[1] === 0) {
+            return 0;
+    }
+    for (let i = 0; i < prefix.length; i++) {
+        if (prefix[i-1] - prefix[0] + nums[0] === prefix[prefix.length - 1] - prefix[i + 1] + nums[i + 1]) {
+            return i
+        }   
+
+    }
+     if (prefix[prefix.length - 2] - prefix[0] + nums[0] === 0) {
+        return prefix.length - 1;
+    }
+    return ans;
+};
+
+//Range Sum Query - Immutable
+//https://leetcode.com/problems/range-sum-query-immutable/
+
+/**
+ * @param {number[]} nums
+ */
+var NumArray = function (nums) {
+  this.nums = nums;
+  this.prefix = [this.nums[0]];
+    for (let i = 1; i < this.nums.length; i++) {
+      this.prefix.push(this.nums[i] + this.prefix[this.prefix.length - 1]);
+    }
+};
+
+/** 
+ * @param {number} left 
+ * @param {number} right
+ * @return {number}
+ */
+NumArray.prototype.sumRange = function(left, right) {
+    return this.prefix[right] - this.prefix[left] + this.nums[left];
+};
+
+/** 
+ * Your NumArray object will be instantiated and called as such:
+ * var obj = new NumArray(nums)
+ * var param_1 = obj.sumRange(left,right)
+ */
+
