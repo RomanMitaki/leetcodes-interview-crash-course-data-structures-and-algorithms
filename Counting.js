@@ -107,3 +107,27 @@ var maxNumberOfBalloons = function(text) {
     }
     return ans;
 };
+
+//Contiguous Array
+//https://leetcode.com/problems/contiguous-array/description/
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var findMaxLength = function(nums) {
+    let ans = 0;
+    const count = new Map();
+    count.set(0, -1);
+    let curr = 0;
+    for (let i = 0; i < nums.length; i++) {
+        curr += nums[i] ? 1 : -1;
+        if (!count.has(curr)) {
+            count.set(curr, i)
+        } else {
+            ans = Math.max(ans, i - count.get(curr))
+        }
+    }
+    return ans;
+};
+
