@@ -131,3 +131,71 @@ var findMaxLength = function(nums) {
     return ans;
 };
 
+//Sum of Unique Elements
+//https://leetcode.com/problems/sum-of-unique-elements/
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var sumOfUnique = function(nums) {
+    let ans = 0;
+    const qty = new Map();
+    nums.forEach(num => {
+        qty.set(num, (qty.get(num) || 0) + 1);
+    });
+    for (let [key, val] of qty) {
+        if (val === 1) {
+            ans += key;
+        }
+    }
+    return ans;
+};
+
+//Find Lucky Integer in an Array
+//https://leetcode.com/problems/find-lucky-integer-in-an-array/
+
+/**
+ * @param {number[]} arr
+ * @return {number}
+ */
+var findLucky = function(arr) {
+    let ans = -1;
+    const qty = new Map();
+    arr.forEach(num => {
+        qty.set(num, (qty.get(num) || 0) + 1);
+    });
+    for (let [key, val] of qty) {
+        if (key === val) {
+            ans = Math.max(ans, val);
+        }
+    }
+    return ans;
+};
+
+//Unique Number of Occurrences
+//https://leetcode.com/problems/unique-number-of-occurrences/
+
+/**
+ * @param {number[]} arr
+ * @return {boolean}
+ */
+var uniqueOccurrences = function(arr) {
+    const qty = Object.values(arr.reduce((acc, num) => ({...acc, [num]: ~~acc[num] + 1}), {}));
+    return qty.length === new Set(qty).size
+};
+
+//Sort Characters By Frequency
+//https://leetcode.com/problems/sort-characters-by-frequency/
+
+/**
+ * @param {string} s
+ * @return {string}
+ */
+var frequencySort = function(s) {
+    const qty = new Map();
+    s.split('').forEach(letter => {
+        qty.set(letter, (qty.get(letter) || 0) + 1);
+    });
+    return [...qty].sort((a, b) => b[1] - a[1]).map(el => el[0].repeat(el[1])).join('');
+};
