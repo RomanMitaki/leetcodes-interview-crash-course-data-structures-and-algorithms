@@ -49,3 +49,39 @@ var sortedSquares = function(nums) {
     }
     return res.reverse()
 };
+
+//Number of Laser Beams in a Bank
+//https://leetcode.com/problems/number-of-laser-beams-in-a-bank/description/
+
+/**
+ * @param {string[]} bank
+ * @return {number}
+ */
+var numberOfBeams = function(bank) {
+    const rows = [];
+    for (let i = 0; i < bank.length; i++) {
+        let line = bank[i];
+        let sum = 0;
+        for (let char of line) {
+            if (char === '1') sum++;
+        };
+        rows.push(sum);
+    }
+    
+    let ans = 0;
+    let first, second;
+
+    for (let devices of rows) {
+        if (devices) {
+            if (!first) {
+                first = devices;
+                continue;
+            }
+            second = devices;
+            ans += first * second;
+            first = second;
+            second = undefined;
+        }
+    }
+    return ans;
+};
