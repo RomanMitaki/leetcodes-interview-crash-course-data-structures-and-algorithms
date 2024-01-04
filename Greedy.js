@@ -219,3 +219,32 @@ var minSetSize = function(arr) {
     return ans;
 };
 
+//Minimum Number of Operations to Make Array Empty
+//https://leetcode.com/problems/minimum-number-of-operations-to-make-array-empty/description/
+
+/**
+ * @param {number[]} nums
+ * @return {number}
+ */
+var minOperations = function(nums) {
+    const dic = new Map();
+    nums.forEach(num => dic.set(num, (dic.get(num) || 0) + 1));
+    if ([...dic.values()].some(el => el === 1)) return -1;
+    let ans = 0;
+    for (let qty of dic.values()) {
+        let curr = qty;
+        while (curr > 0) {
+            if (curr < 3) {
+                curr -= 2;
+                ans++;                
+            } else if (curr === 4) {
+                curr -= 2;
+                ans++;
+            } else {
+                curr -= 3;
+                ans++;
+            }
+        }
+    }
+    return ans;
+};
