@@ -217,3 +217,41 @@ var diameterOfBinaryTree = function(root) {
     findPath(root);
     return ans;
 };
+
+//872 Leaf-Similar Trees
+//https://leetcode.com/problems/leaf-similar-trees/description/
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root1
+ * @param {TreeNode} root2
+ * @return {boolean}
+ */
+var leafSimilar = function(root1, root2) {
+    const leafs1 = [];
+    const leafs2 = [];
+    const getLeafs = (arr, root) => {
+        if (!root) return;
+        if (root.left) {
+            getLeafs(arr, root.left);
+        }
+        if (root.right) {
+            getLeafs(arr, root.right);
+        }
+        if (!root.left && !root.right) {
+            arr.push(root.val);
+            return;
+        }
+    }
+    getLeafs(leafs1, root1);
+    getLeafs(leafs2, root2);
+    if (leafs1.length !== leafs2.length) return false;
+    return leafs1.every((val, idx) => val === leafs2[idx])
+};
