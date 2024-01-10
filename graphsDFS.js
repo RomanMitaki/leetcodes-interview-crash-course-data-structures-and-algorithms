@@ -380,3 +380,50 @@ var maxAreaOfIsland = function(grid) {
     return ans;
 };
 
+//2385. Amount of Time for Binary Tree to Be Infected
+//https://leetcode.com/problems/amount-of-time-for-binary-tree-to-be-infected/description/
+
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val, left, right) {
+ *     this.val = (val===undefined ? 0 : val)
+ *     this.left = (left===undefined ? null : left)
+ *     this.right = (right===undefined ? null : right)
+ * }
+ */
+/**
+ * @param {TreeNode} root
+ * @param {number} start
+ * @return {number}
+ */
+var amountOfTime = function (root, start) {
+    let initialNode;
+    const dfs = (node, parent) => {
+        if (!node) return;
+        if (node.val === start) initialNode = node;
+        node.parent = parent;
+        dfs(node.left, node);
+        dfs(node.right, node);
+    }
+    dfs(root, null);
+
+    let ans = 0;
+    let queue = [initialNode];
+    let seen = new Set([initialNode]);
+    while (queue.length) {
+        let nextQueue = [];
+
+        for (let i = 0; i < queue.length; i++) {
+            let node = queue[i];
+            for (let neighbor of [node.left, node.right, node.parent]) {
+                if (neighbor && !seen.has(neighbor)) {
+                    seen.add(neighbor);
+                    nextQueue.push(neighbor);
+                }
+            }
+        }
+        queue = nextQueue;
+        ans++;
+    }
+    return ans - 1;
+};
