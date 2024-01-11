@@ -165,3 +165,60 @@ var updateMatrix = function(mat) {
 
     return mat;
 };
+
+//1926. Nearest Exit from Entrance in Maze
+//https://leetcode.com/problems/nearest-exit-from-entrance-in-maze/description/
+
+/**
+ * @param {character[][]} maze
+ * @param {number[]} entrance
+ * @return {number}
+ */
+var nearestExit = function (maze, entrance) {
+    const m = maze.length;
+    const n = maze[0].length;
+    const [ir, ic] = entrance;
+    let ans = 0;
+
+    const isValid = (row, col) => {
+        return row >= 0 && row < m && col >= 0 && col < n;
+    }
+
+    const isEntrance = (row, col) => {
+        return row === ir && col === ic;
+    }
+
+    const destinations = [[1, 0], [0, 1], [-1, 0], [0, -1]];
+
+    const seen = [];
+    for (let i = 0; i < m; i++) {
+        seen.push(new Array(n).fill(false))
+    }
+    seen[ir][ic] = true;
+
+    let queue = [entrance];
+
+    while (queue.length) {
+        let nextQueue = [];
+
+        for (let i = 0; i < queue.length; i++) {
+            let [row, col] = queue[i];
+
+            for (let nei of destinations) {
+                let nextRow = row + nei[0];
+                let nextCol = col + nei[1];
+
+                if (!isValid(nextRow, nextCol) && !isEntrance(row, col)) {
+                    return ans;
+                }
+                if (isValid(nextRow, nextCol) && !seen[nextRow][nextCol] && maze[nextRow][nextCol] !== '+') {
+                    seen[nextRow][nextCol] = true;
+                    nextQueue.push([nextRow, nextCol]);
+                }
+            }
+        }
+        ans++;
+        queue = nextQueue;
+    }
+    return -1;
+};
